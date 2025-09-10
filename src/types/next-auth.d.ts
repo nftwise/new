@@ -7,8 +7,8 @@ declare module 'next-auth' {
       email: string;
       name: string;
       companyName: string;
-      gaPropertyId?: string;
-      adsCustomerId?: string;
+      googleAnalyticsPropertyId?: string;
+      googleAdsCustomerId?: string;
       callrailAccountId?: string;
     }
   }
@@ -18,8 +18,8 @@ declare module 'next-auth' {
     email: string;
     name: string;
     companyName: string;
-    gaPropertyId?: string;
-    adsCustomerId?: string;
+    googleAnalyticsPropertyId?: string;
+    googleAdsCustomerId?: string;
     callrailAccountId?: string;
   }
 }
@@ -27,8 +27,8 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   interface JWT {
     companyName?: string;
-    gaPropertyId?: string;
-    adsCustomerId?: string;
+    googleAnalyticsPropertyId?: string;
+    googleAdsCustomerId?: string;
     callrailAccountId?: string;
   }
 }
