@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import fs from 'fs'
 import path from 'path'
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -67,7 +67,7 @@ const handler = NextAuth({
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         token.companyName = user.companyName;
         token.googleAnalyticsPropertyId = user.googleAnalyticsPropertyId;
@@ -76,7 +76,7 @@ const handler = NextAuth({
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (session.user) {
         session.user.companyName = token.companyName as string;
         session.user.googleAnalyticsPropertyId = token.googleAnalyticsPropertyId as string;
@@ -92,8 +92,8 @@ const handler = NextAuth({
   session: {
     strategy: 'jwt',
   },
-  // Update the base path to work with simple route structure
-  basePath: '/api/auth',
-})
+}
+
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
