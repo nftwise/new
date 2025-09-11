@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth'
+import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import fs from 'fs'
 import path from 'path'
 
-export const authOptions = {
+const authOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -90,7 +90,7 @@ export const authOptions = {
     signIn: '/login',
   },
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
   },
 }
 

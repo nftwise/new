@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     // Get session to verify user is authenticated
     const session = await getServerSession();
-    if (!session?.user?.id) {
+    if (!session?.user?.email) {
       return NextResponse.json(
         { success: false, error: 'Authentication required' },
         { status: 401 }
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession();
-    if (!session?.user?.id) {
+    if (!session?.user?.email) {
       return NextResponse.json(
         { success: false, error: 'Authentication required' },
         { status: 401 }
