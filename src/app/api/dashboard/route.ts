@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { GoogleAnalyticsConnector } from '@/lib/google-analytics';
-import { GoogleAdsConnector } from '@/lib/google-ads';
 import { CallRailConnector } from '@/lib/callrail';
 import { withCache, cacheKeys } from '@/lib/cache';
 import { getTimeRangeDates } from '@/lib/utils';
 import { getClientConfig } from '@/lib/server-utils';
 import { DashboardMetrics, ApiResponse } from '@/types';
-import { cachedApiCall, parallelApiCalls, performanceCache } from '@/lib/performance-cache';
+import { parallelApiCalls } from '@/lib/performance-cache';
 
 export async function GET(request: NextRequest) {
   try {

@@ -1,20 +1,34 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import Dashboard from '@/components/AuthenticatedDashboard';
+import Dashboard from '@/components/SimpleDashboard';
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    if (status === 'loading') return; // Still loading
-    if (!session) router.push('/login');
-  }, [session, status, router]);
+    // Check if user is logged in
+    fetch('/api/auth')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.user) {
+          setUser(data.user);
+        } else {
+          router.push('/login');
+        }
+      })
+      .catch(() => {
+        router.push('/login');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [router]);
 
-  if (status === 'loading') {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -25,9 +39,9 @@ export default function DashboardPage() {
     );
   }
 
-  if (!session) {
-    return null; // Will redirect to login
+  if (!user) {
+    return null;
   }
 
-  return <Dashboard />;
+  return <Dashboard user={user} />;
 }
