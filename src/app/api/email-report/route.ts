@@ -1,22 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
 import { sendDashboardReport } from '@/lib/email-service';
 
 export async function POST(request: NextRequest) {
   try {
-    // Get session to verify user is authenticated
-    const session = await getServerSession();
-    if (!session?.user?.id) {
+    // Get user from cookie
+    const userCookie = request.cookies.get('user');
+    if (!userCookie) {
       return NextResponse.json(
         { success: false, error: 'Authentication required' },
         { status: 401 }
       );
     }
 
-    // Get user details from session (JSON file authentication)
+    const userData = JSON.parse(userCookie.value);
+    
+    // Get user details from cookie
     const user = {
-      company_name: session.user.name || 'Your Company',
-      email: session.user.email
+      company_name: userData.companyName || 'Your Company',
+      email: userData.email
     };
 
     const body = await request.json();
@@ -97,8 +98,8 @@ export async function POST(request: NextRequest) {
 // GET endpoint to check email configuration
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession();
-    if (!session?.user?.id) {
+    const userCookie = request.cookies.get('user');
+    if (!userCookie) {
       return NextResponse.json(
         { success: false, error: 'Authentication required' },
         { status: 401 }
