@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth';
 import { GoogleAnalyticsConnector } from '@/lib/google-analytics';
 import { GoogleAdsConnector } from '@/lib/google-ads';
 import { CallRailConnector } from '@/lib/callrail';

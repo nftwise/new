@@ -59,7 +59,7 @@ export default function AuthenticatedDashboard() {
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/dashboard?period=${period}&clientId=${(session.user as any).id}`);
+      const response = await fetch(`/api/dashboard?period=${period}&clientId=${session.user.id}`);
       const result = await response.json();
       
       if (result.success) {
@@ -99,7 +99,7 @@ export default function AuthenticatedDashboard() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                Welcome back, {(session?.user as any)?.companyName}
+                Welcome back, {session?.user?.companyName}
               </h1>
               <p className="text-gray-600 mt-1">
                 Your comprehensive marketing analytics dashboard
@@ -122,7 +122,7 @@ export default function AuthenticatedDashboard() {
               <>
                 <ExportButton
                   data={{
-                    companyName: (session?.user as any)?.companyName,
+                    companyName: session?.user?.companyName,
                     period,
                     ...data,
                   }}
@@ -148,10 +148,10 @@ export default function AuthenticatedDashboard() {
         <GoogleAnalyticsSection period={period} />
 
         {/* Google Ads Section - Only show if client has ads data */}
-        <GoogleAdsSection period={period} clientId={(session?.user as any)?.id} />
+        <GoogleAdsSection period={period} clientId={session?.user?.id} />
 
         {/* Trends & Insights Section */}
-        <TrendsInsightsSection period={period} clientId={(session?.user as any)?.id} />
+        <TrendsInsightsSection period={period} clientId={session?.user?.id} />
 
         {/* Cross-Platform Summary Metrics */}
         <div className="mb-6">
@@ -230,7 +230,7 @@ export default function AuthenticatedDashboard() {
         </div>
 
         {/* CallRail Detailed Section */}
-        <CallRailDetailedSection period={period} loading={loading} clientId={(session?.user as any)?.id} />
+        <CallRailDetailedSection period={period} loading={loading} clientId={session?.user?.id} />
 
         {/* Analytics Charts */}
         <div className="mb-6">
@@ -239,8 +239,8 @@ export default function AuthenticatedDashboard() {
             Trends & Performance Charts
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <GoogleAdsChart period={period} loading={loading} clientId={(session?.user as any)?.id} />
-            <CallRailChart period={period} loading={loading} clientId={(session?.user as any)?.id} />
+            <GoogleAdsChart period={period} loading={loading} clientId={session?.user?.id} />
+            <CallRailChart period={period} loading={loading} clientId={session?.user?.id} />
           </div>
         </div>
 
@@ -251,8 +251,8 @@ export default function AuthenticatedDashboard() {
             Detailed Campaign & Call Reports
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <GoogleAdsCampaignTable period={period} loading={loading} clientId={(session?.user as any)?.id} />
-            <CallsBySourceTable period={period} loading={loading} clientId={(session?.user as any)?.id} />
+            <GoogleAdsCampaignTable period={period} loading={loading} clientId={session?.user?.id} />
+            <CallsBySourceTable period={period} loading={loading} clientId={session?.user?.id} />
           </div>
         </div>
 
@@ -262,7 +262,7 @@ export default function AuthenticatedDashboard() {
             <div className="w-1 h-6 bg-gradient-to-b from-green-500 to-teal-500 rounded"></div>
             Traffic Source Analysis
           </h2>
-          <TrafficSourcesTable period={period} loading={loading} clientId={(session?.user as any)?.id} />
+          <TrafficSourcesTable period={period} loading={loading} clientId={session?.user?.id} />
         </div>
       </div>
     </div>

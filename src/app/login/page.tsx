@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,20 +19,20 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (result?.error) {
-        setError('Invalid email or password. Please try again.');
+      const data = await response.json();
+
+      if (data.success) {
+        router.push('/dashboard');
       } else {
-        // Get the session to access user data
-        const session = await getSession();
-        if (session) {
-          router.push('/dashboard');
-        }
+        setError('Invalid email or password. Please try again.');
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
