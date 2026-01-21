@@ -14,5 +14,8 @@
       "path": "/api/admin/run-rollup",
       "schedule": "0 10 * * *"
     }
-  ]
+  ],
+  "env": {
+    "TZ": "America/Los_Angeles"
+  }
 }
