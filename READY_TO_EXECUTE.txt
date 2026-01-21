@@ -1,0 +1,188 @@
+================================================================================
+                    ✅ READY TO EXECUTE SQL MIGRATIONS
+================================================================================
+
+STEP 1: Go to Supabase Dashboard
+───────────────────────────────────────────────────────────────────────────────
+1. Open: https://app.supabase.com/project/tupedninjtaarmdwppgy/sql
+2. Click "New Query" button (top right)
+3. A new SQL editor window will appear
+
+
+STEP 2: Copy & Paste First SQL File (db_migration.sql)
+───────────────────────────────────────────────────────────────────────────────
+1. Go to: ultimate-report-dashboard-main/db_migration.sql
+2. Select ALL content (Cmd+A)
+3. Copy (Cmd+C)
+4. Paste into Supabase SQL Editor (Cmd+V)
+5. Click "Run" or press Cmd+Enter
+6. Wait ~10 seconds for execution
+7. ✅ Verify: No errors, green checkmark
+
+
+STEP 3: Copy & Paste Second SQL File (import_csv_data.sql)
+───────────────────────────────────────────────────────────────────────────────
+1. Create another "New Query" in Supabase
+2. Go to: ultimate-report-dashboard-main/import_csv_data.sql
+3. Select ALL content (Cmd+A)
+4. Copy (Cmd+C)
+5. Paste into NEW Supabase SQL Editor (Cmd+V)
+6. Click "Run" or press Cmd+Enter
+7. Wait ~10 seconds for execution
+8. ✅ Verify: No errors, green checkmark, shows "rows updated: 20+"
+
+
+STEP 4: Verify Success
+───────────────────────────────────────────────────────────────────────────────
+Run this verification query in a new SQL query:
+
+```sql
+SELECT
+  COUNT(*) as total_clients,
+  COUNT(CASE WHEN website_url IS NOT NULL THEN 1 END) as with_website,
+  COUNT(CASE WHEN has_seo THEN 1 END) as with_seo,
+  COUNT(CASE WHEN has_ads THEN 1 END) as with_ads,
+  COUNT(CASE WHEN has_gbp THEN 1 END) as with_gbp
+FROM clients
+WHERE is_active = true;
+```
+
+Expected results:
+- total_clients: 24
+- with_website: 20+
+- with_seo: 24
+- with_ads: 6
+- with_gbp: 10
+
+
+STEP 5: Check New Tables
+───────────────────────────────────────────────────────────────────────────────
+Run this to verify new tables exist:
+
+```sql
+SELECT table_name FROM information_schema.tables
+WHERE table_schema = 'public'
+AND table_name IN ('client_credentials', 'credential_audit_log')
+ORDER BY table_name;
+```
+
+Expected: 2 rows returned (client_credentials, credential_audit_log)
+
+
+================================================================================
+                            📁 FILE LOCATIONS
+================================================================================
+
+1. db_migration.sql (186 lines)
+   Location: ultimate-report-dashboard-main/db_migration.sql
+   Contains: ALTER TABLE + CREATE TABLE + Functions + Trigger
+
+2. import_csv_data.sql (333 lines)
+   Location: ultimate-report-dashboard-main/import_csv_data.sql
+   Contains: UPDATE clients with data from CSV
+
+3. DATABASE_SCHEMA_PLAN.md
+   Location: ultimate-report-dashboard-main/DATABASE_SCHEMA_PLAN.md
+   Contains: Documentation of all changes
+
+
+================================================================================
+                        ⏱️ ESTIMATED TIME
+================================================================================
+
+Step 1: 1 minute
+Step 2: 2 minutes (copy + paste + execute)
+Step 3: 2 minutes (copy + paste + execute)
+Step 4: 1 minute (verification)
+Step 5: 1 minute (table check)
+
+TOTAL: ~7 minutes
+
+
+================================================================================
+                        ✅ AFTER EXECUTION
+================================================================================
+
+Once completed, you'll have:
+
+✅ CLIENTS table with 14 new columns:
+   - website_url, address, phone, doctor_name
+   - status, seo_rating, ads_rating, ads_budget_month, notes
+   - has_seo, has_ads, has_gbp, has_callrail, wordpress_site
+
+✅ SERVICE_CONFIGS table with 2 new columns:
+   - gsc_id, gbp_id
+
+✅ CLIENT_CREDENTIALS table (NEW):
+   - Stores WordPress/platform login credentials securely
+   - Automatic encryption using pgcrypto
+
+✅ CREDENTIAL_AUDIT_LOG table (NEW):
+   - Tracks who accessed credentials and when
+   - Audit trail for compliance
+
+✅ 3 SQL Functions:
+   - encrypt_password() - Encrypt passwords
+   - decrypt_credential() - Decrypt with audit logging
+   - update_service_flags() - Auto-update service flags
+
+✅ 1 Trigger:
+   - Auto-updates has_seo, has_ads, has_gbp when service_configs changes
+
+✅ 18+ Clients with complete information:
+   - Business info, contact details, ratings, budget
+   - Status: Working/Cancel/?
+
+
+================================================================================
+                        🎯 NEXT STEPS AFTER EXECUTION
+================================================================================
+
+1. Verify all 5 steps above ✅
+2. Proceed with 9-MONTH BACKFILL:
+   - Google Analytics: 24 clients
+   - Google Search Console: 24 clients
+   - Google Ads: 6 clients (only those with Ads Customer ID)
+   - Google Business Profile: 10 clients (only those with Location ID)
+   - CallRail: 1 global account
+
+
+================================================================================
+                        ⚠️ TROUBLESHOOTING
+================================================================================
+
+If you get an error:
+
+ERROR 1: "syntax error in SQL"
+→ Make sure you copied the ENTIRE file
+→ Check for truncated lines
+→ Retry in a new Query window
+
+ERROR 2: "column already exists"
+→ This is OK! IF NOT EXISTS means it's safe to re-run
+→ Continue to next step
+
+ERROR 3: "No rows updated" in import_csv_data.sql
+→ Check that clients table has correct slug values
+→ Some clients might not match
+→ This is OK - proceed to verification
+
+If all else fails:
+→ Screenshot the error
+→ Share with support team
+→ I can help debug
+
+
+================================================================================
+                        📞 READY?
+================================================================================
+
+You're all set!
+
+1. Open Supabase Dashboard
+2. Copy db_migration.sql → Execute
+3. Copy import_csv_data.sql → Execute
+4. Run verification queries
+5. Let me know when done ✅
+
+Then we'll start the 9-month backfill!

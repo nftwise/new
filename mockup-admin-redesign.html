@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Redesign - Golden Ratio UX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #fdfbf7;
+            --chocolate: #2c2419;
+            --gold: #ffd800;
+            --coral: #ff9b85;
+            --slate: #7d8a96;
+            --sage: #9db5a0;
+            --shadow-brown: rgba(44, 36, 25, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--cream);
+            color: var(--chocolate);
+        }
+
+        /* COMPACT HEADER - 48px height (Golden ratio: reduced from 64px) */
+        .header {
+            background: white;
+            border-bottom: 1px solid rgba(44, 36, 25, 0.1);
+            height: 48px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--chocolate);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .date-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 12px;
+            background: rgba(44, 36, 25, 0.05);
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--chocolate);
+            color: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        /* COMPACT HERO - 80px height (Golden ratio: 1.618 reduction from previous) */
+        .hero {
+            background: linear-gradient(135deg, #B8956A 0%, #8B7355 100%);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            color: var(--cream);
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-meta {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+
+        /* MAIN CONTAINER - Using golden ratio spacing */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+
+        /* STATS GRID - Compact, 4 columns */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 2px 8px var(--shadow-brown);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.5;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        /* INSIGHTS - Compact design */
+        .insights-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px var(--shadow-brown);
+            margin-bottom: 16px;
+        }
+
+        .insights-header {
+            font-size: 16px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .insight-card {
+            background: rgba(44, 36, 25, 0.02);
+            border-radius: 10px;
+            padding: 14px;
+            border: 1px solid rgba(44, 36, 25, 0.06);
+        }
+
+        .insight-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+
+        .insight-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(44, 36, 25, 0.04);
+        }
+
+        .insight-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .insight-client-name {
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .insight-label {
+            font-size: 10px;
+            opacity: 0.5;
+            margin-top: 1px;
+        }
+
+        .insight-metric {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        /* TABLE - Completely redesigned, no sticky header issues */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px var(--shadow-brown);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(44, 36, 25, 0.08);
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        /* Simple table without sticky header complications */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: rgba(44, 36, 25, 0.03);
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 12px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--chocolate);
+            opacity: 0.6;
+            border-bottom: 1px solid rgba(44, 36, 25, 0.1);
+        }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid rgba(44, 36, 25, 0.05);
+            transition: background 0.15s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 216, 0, 0.04);
+        }
+
+        .data-table td {
+            padding: 14px 10px;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .client-name-col {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .client-slug {
+            font-size: 11px;
+            opacity: 0.4;
+            margin-top: 2px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-right: 4px;
+        }
+
+        .badge-seo { background: var(--gold); color: var(--chocolate); }
+        .badge-ads { background: var(--slate); color: white; }
+        .badge-gbp { background: var(--sage); color: white; }
+
+        .metric-val {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .trend-up { color: var(--sage); font-weight: 700; }
+        .trend-down { color: var(--coral); font-weight: 700; }
+        .trend-neutral { color: var(--slate); font-weight: 600; }
+
+        .status-excellent { color: var(--sage); font-weight: 700; }
+        .status-good { color: var(--chocolate); font-weight: 600; }
+        .status-watch { color: #f59e0b; font-weight: 700; }
+        .status-critical { color: var(--coral); font-weight: 700; }
+
+        /* Action indicators */
+        .action-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        .action-dot.urgent { background: var(--coral); }
+        .action-dot.opportunity { background: var(--gold); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Compact Header: 48px -->
+    <div class="header">
+        <div class="logo">MyChiropractice</div>
+        <div class="header-right">
+            <div class="date-badge">Dec 8 - Jan 7, 2026</div>
+            <div class="user-avatar">A</div>
+        </div>
+    </div>
+
+    <!-- Compact Hero: 80px -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-title">Team Overview</div>
+            <div class="hero-meta">24 Active Clients</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Compact Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Clients</div>
+                <div class="stat-value">24</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Leads</div>
+                <div class="stat-value">1,847</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Ad Spend</div>
+                <div class="stat-value">$45.2K</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg CPL</div>
+                <div class="stat-value">$24.52</div>
+            </div>
+        </div>
+
+        <!-- Compact Insights -->
+        <div class="insights-section">
+            <div class="insights-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                Performance Insights
+            </div>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-title">Top Performers</div>
+                    <div class="insight-item">
+                        <div>
+                            <div class="insight-client-name">Optimal Health</div>
+                            <div class="insight-label">18% growth</div>
+                        </div>
+                        <div class="insight-metric trend-up">$43</div>
+                    </div>
+                    <div class="insight-item">
+                        <div>
+                            <div class="insight-client-name">Advanced Chiro</div>
+                            <div class="insight-label">Consistent</div>
+                        </div>
+                        <div class="insight-metric trend-up">$27</div>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-title">Needs Attention</div>
+                    <div class="insight-item">
+                        <div>
+                            <div class="insight-client-name">Total Body</div>
+                            <div class="insight-label">Down 15%</div>
+                        </div>
+                        <div class="insight-metric trend-down">-15%</div>
+                    </div>
+                    <div class="insight-item">
+                        <div>
+                            <div class="insight-client-name">Family Wellness</div>
+                            <div class="insight-label">No growth</div>
+                        </div>
+                        <div class="insight-metric trend-neutral">0%</div>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-title">Upsell Opportunities</div>
+                    <div class="insight-item">
+                        <div>
+                            <div class="insight-client-name">Peak Wellness</div>
+                            <div class="insight-label">Add Google Ads</div>
+                        </div>
+                        <div class="insight-metric">💰</div>
+                    </div>
+                    <div class="insight-item">
+                        <div>
+                            <div class="insight-client-name">Spine Center</div>
+                            <div class="insight-label">Add SEO</div>
+                        </div>
+                        <div class="insight-metric">💰</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clean Table Section (NO STICKY HEADER) -->
+        <div class="table-section">
+            <div class="table-header">
+                <div class="table-title">Client Performance (24)</div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Services</th>
+                        <th>Leads</th>
+                        <th>Spend</th>
+                        <th>CPL</th>
+                        <th>SEO Rank</th>
+                        <th>GBP Calls</th>
+                        <th>Trend</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="client-name-col">DiGrado Chiropractic</div>
+                            <div class="client-slug">@digrado</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-seo">SEO</span>
+                            <span class="badge badge-ads">Ads</span>
+                            <span class="badge badge-gbp">GBP</span>
+                        </td>
+                        <td><span class="metric-val">127</span></td>
+                        <td><span class="metric-val">$3.5K</span></td>
+                        <td><span class="metric-val">$27</span></td>
+                        <td><span class="metric-val">#3</span></td>
+                        <td><span class="metric-val">42</span></td>
+                        <td><span class="trend-up">↑ 12%</span></td>
+                        <td><span class="status-excellent">● Excellent</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="client-name-col">
+                                <span class="action-dot opportunity"></span>
+                                Peak Wellness
+                            </div>
+                            <div class="client-slug">@peak-wellness</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-seo">SEO</span>
+                            <span class="badge badge-gbp">GBP</span>
+                        </td>
+                        <td><span class="metric-val">89</span></td>
+                        <td><span class="metric-val">$0</span></td>
+                        <td><span class="metric-val">$0</span></td>
+                        <td><span class="metric-val">#7</span></td>
+                        <td><span class="metric-val">67</span></td>
+                        <td><span class="trend-up">↑ 8%</span></td>
+                        <td><span class="status-good">● Good</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="client-name-col">Spine & Joint Center</div>
+                            <div class="client-slug">@spine-joint</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-ads">Ads</span>
+                        </td>
+                        <td><span class="metric-val">156</span></td>
+                        <td><span class="metric-val">$5.2K</span></td>
+                        <td><span class="metric-val">$33</span></td>
+                        <td>-</td>
+                        <td><span class="metric-val">28</span></td>
+                        <td><span class="trend-down">↓ 5%</span></td>
+                        <td><span class="status-watch">● Watch</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="client-name-col">Optimal Health</div>
+                            <div class="client-slug">@optimal-health</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-seo">SEO</span>
+                            <span class="badge badge-ads">Ads</span>
+                            <span class="badge badge-gbp">GBP</span>
+                        </td>
+                        <td><span class="metric-val">203</span></td>
+                        <td><span class="metric-val">$8.8K</span></td>
+                        <td><span class="metric-val">$43</span></td>
+                        <td><span class="metric-val">#1</span></td>
+                        <td><span class="metric-val">95</span></td>
+                        <td><span class="trend-up">↑ 18%</span></td>
+                        <td><span class="status-excellent">● Excellent</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="client-name-col">Family Wellness</div>
+                            <div class="client-slug">@family-wellness</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-seo">SEO</span>
+                        </td>
+                        <td><span class="metric-val">45</span></td>
+                        <td><span class="metric-val">$0</span></td>
+                        <td><span class="metric-val">$0</span></td>
+                        <td><span class="metric-val">#12</span></td>
+                        <td><span class="metric-val">18</span></td>
+                        <td><span class="trend-neutral">→ 0%</span></td>
+                        <td><span class="status-good">● Good</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="client-name-col">
+                                <span class="action-dot urgent"></span>
+                                Total Body Alignment
+                            </div>
+                            <div class="client-slug">@total-body</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-ads">Ads</span>
+                            <span class="badge badge-gbp">GBP</span>
+                        </td>
+                        <td><span class="metric-val">72</span></td>
+                        <td><span class="metric-val">$2.9K</span></td>
+                        <td><span class="metric-val">$40</span></td>
+                        <td>-</td>
+                        <td><span class="metric-val">31</span></td>
+                        <td><span class="trend-down">↓ 15%</span></td>
+                        <td><span class="status-critical">● Critical</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="client-name-col">Wellness First</div>
+                            <div class="client-slug">@wellness-first</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-seo">SEO</span>
+                            <span class="badge badge-ads">Ads</span>
+                        </td>
+                        <td><span class="metric-val">94</span></td>
+                        <td><span class="metric-val">$3.2K</span></td>
+                        <td><span class="metric-val">$34</span></td>
+                        <td><span class="metric-val">#5</span></td>
+                        <td><span class="metric-val">52</span></td>
+                        <td><span class="trend-up">↑ 6%</span></td>
+                        <td><span class="status-good">● Good</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="client-name-col">Active Life Clinic</div>
+                            <div class="client-slug">@active-life</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-seo">SEO</span>
+                            <span class="badge badge-gbp">GBP</span>
+                        </td>
+                        <td><span class="metric-val">78</span></td>
+                        <td><span class="metric-val">$0</span></td>
+                        <td><span class="metric-val">$0</span></td>
+                        <td><span class="metric-val">#9</span></td>
+                        <td><span class="metric-val">44</span></td>
+                        <td><span class="trend-up">↑ 3%</span></td>
+                        <td><span class="status-good">● Good</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

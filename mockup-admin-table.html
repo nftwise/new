@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Table View - Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #fdfbf7;
+            --chocolate: #2c2419;
+            --gold: #ffd800;
+            --coral: #ff9b85;
+            --slate: #7d8a96;
+            --sage: #9db5a0;
+            --shadow-brown: rgba(44, 36, 25, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--cream);
+            color: var(--chocolate);
+            padding: 0;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid rgba(44, 36, 25, 0.1);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .search-box {
+            padding: 10px 16px;
+            border: 1px solid rgba(44, 36, 25, 0.1);
+            border-radius: 100px;
+            font-size: 14px;
+            width: 300px;
+            font-family: inherit;
+        }
+
+        .date-range {
+            background: rgba(44, 36, 25, 0.05);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #B8956A 0%, #8B7355 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: var(--cream);
+        }
+
+        .hero-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+
+        .hero-date {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* Stats Summary */
+        .stats-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 32px var(--shadow-brown);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.5;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: var(--chocolate);
+        }
+
+        /* Table Container */
+        .table-container {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 32px var(--shadow-brown);
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .table-header h2 {
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            background: rgba(44, 36, 25, 0.05);
+            padding: 4px;
+            border-radius: 100px;
+        }
+
+        .view-toggle button {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 100px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-toggle button.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(44, 36, 25, 0.1);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+        }
+
+        thead {
+            position: sticky;
+            top: 72px;
+            background: white;
+            z-index: 10;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--chocolate);
+            opacity: 0.5;
+            border-bottom: 2px solid rgba(44, 36, 25, 0.1);
+            white-space: nowrap;
+        }
+
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th.sortable:hover {
+            opacity: 0.8;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(44, 36, 25, 0.05);
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 216, 0, 0.05);
+            cursor: pointer;
+        }
+
+        td {
+            padding: 20px 12px;
+            font-weight: 400;
+            vertical-align: middle;
+        }
+
+        .client-name {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .client-slug {
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 2px;
+        }
+
+        .badge-green { background: var(--sage); color: white; }
+        .badge-gold { background: var(--gold); color: var(--chocolate); }
+        .badge-blue { background: var(--slate); color: white; }
+        .badge-coral { background: var(--coral); color: white; }
+
+        .status-excellent { color: var(--sage); }
+        .status-good { color: var(--chocolate); }
+        .status-watch { color: #f59e0b; }
+        .status-critical { color: var(--coral); }
+
+        .trend-up { color: var(--sage); }
+        .trend-down { color: var(--coral); }
+        .trend-neutral { color: var(--slate); }
+
+        .sparkline {
+            width: 60px;
+            height: 24px;
+        }
+
+        /* Column widths */
+        .col-client { min-width: 180px; }
+        .col-services { min-width: 180px; }
+        .col-leads { min-width: 100px; }
+        .col-spend { min-width: 100px; }
+        .col-cpl { min-width: 100px; }
+        .col-seo { min-width: 120px; }
+        .col-gbp { min-width: 100px; }
+        .col-ads { min-width: 100px; }
+        .col-trend { min-width: 80px; }
+        .col-status { min-width: 100px; }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                border-radius: 16px;
+                padding: 16px;
+            }
+
+            .header {
+                padding: 16px 20px;
+            }
+
+            .stats-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Team Overview</h1>
+        <div class="header-controls">
+            <input type="text" class="search-box" placeholder="Search clients...">
+            <div class="date-range">Last 30 Days</div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--chocolate); color: var(--cream); display: flex; align-items: center; justify-content: center; font-weight: 700;">A</div>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="hero-label">TEAM OVERVIEW</div>
+        <h1>All Clients</h1>
+        <div class="hero-date">Dec 8 - Jan 7, 2026</div>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="stats-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Clients</div>
+                <div class="stat-value">24</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Leads</div>
+                <div class="stat-value">1,847</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Ad Spend</div>
+                <div class="stat-value">$45,290</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg. Cost Per Lead</div>
+                <div class="stat-value">$24.52</div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Client Performance</h2>
+                <div class="view-toggle">
+                    <button class="active">Table View</button>
+                    <button>Card View</button>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-client sortable">Client</th>
+                        <th class="col-services">Services</th>
+                        <th class="col-leads sortable">Total Leads</th>
+                        <th class="col-spend sortable">Ad Spend</th>
+                        <th class="col-cpl sortable">CPL</th>
+                        <th class="col-seo">SEO Rank</th>
+                        <th class="col-gbp">GBP Calls</th>
+                        <th class="col-ads">Ads Conv.</th>
+                        <th class="col-trend">Trend</th>
+                        <th class="col-status">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Client 1 -->
+                    <tr>
+                        <td class="col-client">
+                            <div class="client-name">Advanced Chiropractic</div>
+                            <div class="client-slug">@advanced-chiro</div>
+                        </td>
+                        <td class="col-services">
+                            <span class="badge badge-gold">SEO</span>
+                            <span class="badge badge-blue">Ads</span>
+                            <span class="badge badge-green">GBP</span>
+                        </td>
+                        <td class="col-leads">
+                            <span class="metric-value">127</span>
+                        </td>
+                        <td class="col-spend">
+                            <span class="metric-value">$3,450</span>
+                        </td>
+                        <td class="col-cpl">
+                            <span class="metric-value">$27.17</span>
+                        </td>
+                        <td class="col-seo">
+                            <span class="metric-value">#3</span>
+                            <span class="metric-label">15 Keywords</span>
+                        </td>
+                        <td class="col-gbp">
+                            <span class="metric-value">42</span>
+                        </td>
+                        <td class="col-ads">
+                            <span class="metric-value">85</span>
+                        </td>
+                        <td class="col-trend">
+                            <span class="trend-up">↑ 12%</span>
+                        </td>
+                        <td class="col-status">
+                            <span class="status-excellent">● Excellent</span>
+                        </td>
+                    </tr>
+
+                    <!-- Client 2 -->
+                    <tr>
+                        <td class="col-client">
+                            <div class="client-name">Peak Performance Wellness</div>
+                            <div class="client-slug">@peak-wellness</div>
+                        </td>
+                        <td class="col-services">
+                            <span class="badge badge-gold">SEO</span>
+                            <span class="badge badge-green">GBP</span>
+                        </td>
+                        <td class="col-leads">
+                            <span class="metric-value">89</span>
+                        </td>
+                        <td class="col-spend">
+                            <span class="metric-value">$0</span>
+                        </td>
+                        <td class="col-cpl">
+                            <span class="metric-value">$0</span>
+                        </td>
+                        <td class="col-seo">
+                            <span class="metric-value">#7</span>
+                            <span class="metric-label">22 Keywords</span>
+                        </td>
+                        <td class="col-gbp">
+                            <span class="metric-value">67</span>
+                        </td>
+                        <td class="col-ads">
+                            <span class="metric-value">-</span>
+                        </td>
+                        <td class="col-trend">
+                            <span class="trend-up">↑ 8%</span>
+                        </td>
+                        <td class="col-status">
+                            <span class="status-good">● Good</span>
+                        </td>
+                    </tr>
+
+                    <!-- Client 3 -->
+                    <tr>
+                        <td class="col-client">
+                            <div class="client-name">Spine & Joint Center</div>
+                            <div class="client-slug">@spine-joint</div>
+                        </td>
+                        <td class="col-services">
+                            <span class="badge badge-blue">Ads</span>
+                            <span class="badge badge-coral">Facebook</span>
+                        </td>
+                        <td class="col-leads">
+                            <span class="metric-value">156</span>
+                        </td>
+                        <td class="col-spend">
+                            <span class="metric-value">$5,200</span>
+                        </td>
+                        <td class="col-cpl">
+                            <span class="metric-value">$33.33</span>
+                        </td>
+                        <td class="col-seo">
+                            <span class="metric-value">-</span>
+                        </td>
+                        <td class="col-gbp">
+                            <span class="metric-value">28</span>
+                        </td>
+                        <td class="col-ads">
+                            <span class="metric-value">128</span>
+                        </td>
+                        <td class="col-trend">
+                            <span class="trend-down">↓ 5%</span>
+                        </td>
+                        <td class="col-status">
+                            <span class="status-watch">● Watch</span>
+                        </td>
+                    </tr>
+
+                    <!-- Client 4 -->
+                    <tr>
+                        <td class="col-client">
+                            <div class="client-name">Optimal Health Chiropractic</div>
+                            <div class="client-slug">@optimal-health</div>
+                        </td>
+                        <td class="col-services">
+                            <span class="badge badge-gold">SEO</span>
+                            <span class="badge badge-blue">Ads</span>
+                            <span class="badge badge-green">GBP</span>
+                            <span class="badge badge-coral">Facebook</span>
+                        </td>
+                        <td class="col-leads">
+                            <span class="metric-value">203</span>
+                        </td>
+                        <td class="col-spend">
+                            <span class="metric-value">$8,750</span>
+                        </td>
+                        <td class="col-cpl">
+                            <span class="metric-value">$43.10</span>
+                        </td>
+                        <td class="col-seo">
+                            <span class="metric-value">#1</span>
+                            <span class="metric-label">28 Keywords</span>
+                        </td>
+                        <td class="col-gbp">
+                            <span class="metric-value">95</span>
+                        </td>
+                        <td class="col-ads">
+                            <span class="metric-value">108</span>
+                        </td>
+                        <td class="col-trend">
+                            <span class="trend-up">↑ 18%</span>
+                        </td>
+                        <td class="col-status">
+                            <span class="status-excellent">● Excellent</span>
+                        </td>
+                    </tr>
+
+                    <!-- Client 5 -->
+                    <tr>
+                        <td class="col-client">
+                            <div class="client-name">Family Wellness Clinic</div>
+                            <div class="client-slug">@family-wellness</div>
+                        </td>
+                        <td class="col-services">
+                            <span class="badge badge-gold">SEO</span>
+                        </td>
+                        <td class="col-leads">
+                            <span class="metric-value">45</span>
+                        </td>
+                        <td class="col-spend">
+                            <span class="metric-value">$0</span>
+                        </td>
+                        <td class="col-cpl">
+                            <span class="metric-value">$0</span>
+                        </td>
+                        <td class="col-seo">
+                            <span class="metric-value">#12</span>
+                            <span class="metric-label">8 Keywords</span>
+                        </td>
+                        <td class="col-gbp">
+                            <span class="metric-value">18</span>
+                        </td>
+                        <td class="col-ads">
+                            <span class="metric-value">-</span>
+                        </td>
+                        <td class="col-trend">
+                            <span class="trend-neutral">→ 0%</span>
+                        </td>
+                        <td class="col-status">
+                            <span class="status-good">● Good</span>
+                        </td>
+                    </tr>
+
+                    <!-- Client 6 -->
+                    <tr>
+                        <td class="col-client">
+                            <div class="client-name">Total Body Alignment</div>
+                            <div class="client-slug">@total-body</div>
+                        </td>
+                        <td class="col-services">
+                            <span class="badge badge-blue">Ads</span>
+                            <span class="badge badge-green">GBP</span>
+                        </td>
+                        <td class="col-leads">
+                            <span class="metric-value">72</span>
+                        </td>
+                        <td class="col-spend">
+                            <span class="metric-value">$2,890</span>
+                        </td>
+                        <td class="col-cpl">
+                            <span class="metric-value">$40.14</span>
+                        </td>
+                        <td class="col-seo">
+                            <span class="metric-value">-</span>
+                        </td>
+                        <td class="col-gbp">
+                            <span class="metric-value">31</span>
+                        </td>
+                        <td class="col-ads">
+                            <span class="metric-value">41</span>
+                        </td>
+                        <td class="col-trend">
+                            <span class="trend-down">↓ 15%</span>
+                        </td>
+                        <td class="col-status">
+                            <span class="status-critical">● Critical</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Simple sort functionality demo
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.addEventListener('click', () => {
+                console.log('Sort by:', th.textContent);
+                // Sort logic would go here
+            });
+        });
+
+        // Row click demo
+        document.querySelectorAll('tbody tr').forEach(tr => {
+            tr.addEventListener('click', () => {
+                const clientName = tr.querySelector('.client-name').textContent;
+                console.log('Navigate to:', clientName);
+                // Navigation would go here
+            });
+        });
+
+        // View toggle demo
+        document.querySelectorAll('.view-toggle button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                console.log('Switch to:', btn.textContent);
+            });
+        });
+    </script>
+</body>
+</html>
