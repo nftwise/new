@@ -284,6 +284,59 @@ export class GoogleAdsServiceAccountConnector {
       },
     };
   }
+
+  /**
+   * Execute a custom GAQL query and return raw results
+   */
+  async executeQuery(
+    query: string,
+    customerId?: string,
+    mccId?: string
+  ): Promise<any[]> {
+    const useCustomerId = this.cleanCustomerId(customerId || this.credentials.customerId);
+    const useMccId = mccId || this.credentials.mccId;
+
+    if (!useCustomerId) {
+      console.log('[GoogleAdsServiceAccount] No customer ID provided');
+      return [];
+    }
+
+    try {
+      const accessToken = await this.getAccessToken();
+
+      const response = await fetch(
+        `https://googleads.googleapis.com/v20/customers/${useCustomerId}/googleAds:searchStream`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'developer-token': this.credentials.developerToken,
+            'Content-Type': 'application/json',
+            ...(useMccId ? { 'login-customer-id': this.cleanCustomerId(useMccId) } : {}),
+          },
+          body: JSON.stringify({ query }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[GoogleAdsServiceAccount] Query Error:', errorText.substring(0, 200));
+        return [];
+      }
+
+      const data = await response.json();
+      const results: any[] = [];
+      for (const batch of data || []) {
+        for (const result of batch.results || []) {
+          results.push(result);
+        }
+      }
+      return results;
+    } catch (error: any) {
+      console.error('[GoogleAdsServiceAccount] Query Error:', error.message);
+      return [];
+    }
+  }
 }
 
 /**

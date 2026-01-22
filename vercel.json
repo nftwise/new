@@ -7,12 +7,22 @@
     },
     "app/api/admin/run-rollup/route.ts": {
       "maxDuration": 300
+    },
+    "app/api/admin/run-campaign-rollup/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/admin/run-gbp-backfill/route.ts": {
+      "maxDuration": 300
     }
   },
   "crons": [
     {
       "path": "/api/admin/run-rollup",
       "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/admin/run-campaign-rollup",
+      "schedule": "0 11 * * *"
     }
   ]
 }

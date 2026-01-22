@@ -6,8 +6,8 @@ import { getToken } from 'next-auth/jwt'
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Allow run-rollup API with cron secret (for backfill scripts)
-  if (pathname === '/api/admin/run-rollup') {
+  // Allow run-rollup APIs with cron secret (for backfill scripts)
+  if (pathname === '/api/admin/run-rollup' || pathname === '/api/admin/run-campaign-rollup') {
     // Check Authorization header for cron secret
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET
