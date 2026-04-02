@@ -3,13 +3,17 @@ import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
+import { resolveAbsoluteUrl } from '@/lib/utils/request-url';
 
 /**
  * GET /api/auth/google-analytics/callback
  * Handles OAuth2 callback from Google
  */
 export async function GET(request: NextRequest) {
+  const dashboardUrl = resolveAbsoluteUrl('/dashboard', request);
+
   try {
+    const callbackUrl = resolveAbsoluteUrl('/api/auth/google-analytics/callback', request);
     const searchParams = request.nextUrl.searchParams;
     const code = searchParams.get('code');
     const state = searchParams.get('state'); // This is the clientId
@@ -17,9 +21,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('[GA OAuth] User denied access:', error);
-      return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?error=access_denied`
-      );
+      return NextResponse.redirect(`${dashboardUrl}?error=access_denied`);
     }
 
     if (!code || !state) {
@@ -35,7 +37,7 @@ export async function GET(request: NextRequest) {
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_OAUTH_CLIENT_ID,
       process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/google-analytics/callback`
+      callbackUrl
     );
 
     // Exchange code for tokens
@@ -46,9 +48,7 @@ export async function GET(request: NextRequest) {
 
     if (!tokens.refresh_token) {
       console.error('[GA OAuth] No refresh token received!');
-      return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?error=no_refresh_token`
-      );
+      return NextResponse.redirect(`${dashboardUrl}?error=no_refresh_token`);
     }
 
     // Get the user's email from Google
@@ -98,14 +98,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Redirect back to dashboard with success
-    return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?ga_connected=true`
-    );
+    return NextResponse.redirect(`${dashboardUrl}?ga_connected=true`);
 
   } catch (error: any) {
     console.error('Error in GA OAuth callback:', error);
-    return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?error=oauth_failed`
-    );
+    return NextResponse.redirect(`${dashboardUrl}?error=oauth_failed`);
   }
 }
