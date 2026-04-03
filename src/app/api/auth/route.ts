@@ -1,65 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
-
-    // Read clients from JSON file
-    const filePath = path.join(process.cwd(), 'src', 'data', 'clients.json');
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const clientsData = JSON.parse(fileContents);
-
-    // Find user by email and validate password
-    const user = clientsData.clients.find((client: any) => 
-      client.email === email && client.password === password
-    );
-
-    if (user) {
-      // Set a simple cookie with user data
-      const response = NextResponse.json({ 
-        success: true, 
-        user: {
-          id: user.id,
-          email: user.email,
-          companyName: user.companyName
-        }
-      });
-      
-      // Store user data in a simple cookie
-      response.cookies.set('user', JSON.stringify({
-        id: user.id,
-        email: user.email,
-        companyName: user.companyName,
-        googleAnalyticsPropertyId: user.googleAnalyticsPropertyId,
-        googleAdsCustomerId: user.googleAdsCustomerId,
-        callrailAccountId: user.callrailAccountId
-      }), {
-        httpOnly: true,
-        maxAge: 86400 // 24 hours
-      });
-      
-      return response;
-    }
-
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Invalid credentials' 
-    }, { status: 401 });
-    
+    await request.json().catch(() => null);
+    return NextResponse.json({
+      success: false,
+      error: 'Legacy /api/auth login is disabled. Use NextAuth credentials sign-in at /api/auth/[...nextauth].'
+    }, { status: 410 });
   } catch (_error) {
-    return NextResponse.json({ 
-      success: false, 
+    return NextResponse.json({
+      success: false,
       error: 'Server error' 
     }, { status: 500 });
   }
 }
 
-// Handle logout
+// Handle logout — clear both legacy cookie and NextAuth session cookie
 export async function DELETE() {
   const response = NextResponse.json({ success: true });
   response.cookies.delete('user');
+  response.cookies.delete('next-auth.session-token');
+  response.cookies.delete('__Secure-next-auth.session-token');
   return response;
 }
 

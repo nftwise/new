@@ -348,7 +348,9 @@ export default function ProfessionalDashboard({ user }: { user: any }) {
 
   const handleLogout = async () => {
     await fetch('/api/auth', { method: 'DELETE' });
-    router.push('/login');
+    // Also sign out NextAuth session, then redirect
+    const { signOut } = await import('next-auth/react');
+    signOut({ callbackUrl: '/login' });
   };
 
   // Calculate KPIs with fallback for missing data
