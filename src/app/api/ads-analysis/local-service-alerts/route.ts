@@ -1,10 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
 import { stlDecomposition, isSeasonalAnomaly } from '@/lib/analytics/seasonal-decomposition'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  )
+}
 
 interface Alert {
   id: string
@@ -46,7 +48,7 @@ export async function GET(request: Request) {
     const fourteenDaysAgo = new Date()
     fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - BASELINE_DAYS)
 
-    const { data: campaigns, error: campaignsError } = await supabase
+    const { data: campaigns, error: campaignsError } = await getSupabase()
       .from('ads_campaigns')
       .select('*')
       .eq('client_id', clientId)

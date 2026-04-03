@@ -137,7 +137,7 @@ async function runGBPBackfill(startDate: string, endDate: string) {
               ]).catch(() => null)
             ]);
 
-            const perf = performance || {};
+            const perf: Record<string, any> = (performance as Record<string, any>) || {};
 
             return {
               client_id: client.id,

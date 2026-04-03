@@ -1,9 +1,11 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  )
+}
 
 interface Hypothesis {
   cause: string
@@ -83,7 +85,7 @@ export async function POST(request: Request) {
     let leadQualityScore = getLeadQualityScore(null)
 
     // Fetch recent campaign data for context
-    const { data: recentData } = await supabase
+    const { data: recentData } = await getSupabase()
       .from('ads_campaigns')
       .select('*')
       .eq('client_id', clientId)
